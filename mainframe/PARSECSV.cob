@@ -60,6 +60,8 @@
               END-IF 
            END-PERFORM.
          020-END.
+           CLOSE CSV-FILE.
+           CLOSE CLSTER-FILE.
            GOBACK.
          ADD-TO-CURRENT.
            ADD CSV-KARMA TO WS-CUR-KARMA GIVING WS-CUR-KARMA.
