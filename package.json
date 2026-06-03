@@ -1,0 +1,20 @@
+{
+  "name": "hn_api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch --env-file=.env index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@zowe/core-for-zowe-sdk": "^8.32.2",
+    "@zowe/imperative": "^8.32.2",
+    "@zowe/zos-jobs-for-zowe-sdk": "^8.32.2",
+    "cors": "^2.8.6",
+    "express": "^5.2.1"
+  },
+  "description": ""
+}
