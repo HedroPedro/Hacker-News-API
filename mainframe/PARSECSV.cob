@@ -18,51 +18,53 @@
        FILE SECTION.
        FD CSV-FILE
        01 CSV-REC.
-           05 CSV-ID      PIC X(4).
+           05 CSV-ID      PIC X(6).
            05 FILLER      PIC X VALUE ','.
            05 CSV-KARMA   PIC 9(6).
            05 FILLER      PIC X VALUE ','.
            05 CSV-COMMENT PIC 9(7).
-           05 FILLER      PIC X(61) VALUE SPACE.
+           05 FILLER      PIC X(59) VALUE SPACE.
        FD CLSTER-FILE
        01 CLSTER-REC.
-           05 CLSTER-KEY     PIC 9(4).
-           05 CLSTER-POINT   PIC 9(10).
-           05 CLSTER-COMMENT PIC 9(12).
+           05 CLSTER-KEY     PIC 9(6).
+           05 CLSTER-POINT   PIC 9(11).
+           05 CLSTER-COMMENT PIC 9(11).
        WORKING-STORAGE SECTION.
            05 WS-STATUS      PIC 9(2).
-           05 WS-CURRENT-KEY PIC 9(4) VALUE ZERO.
+           05 WS-CUR-REC. 
+              10 WS-CURRENT-KEY PIC 9(6) VALUE ZERO.
+              10 WS-CUR-KARMA   PIC 9(10) VALUE ZERO.
+              10 WS-CUR-COMMENT PIC 9(12) VALUE ZERO.
            05 WS-END         PIC X VALUE 'N'.
-           05 WS-CUR-KARMA   PIC 9(10) VALUE ZERO.
-           05 WS-CUR-COMMENT PIC 9(12) VALUE ZERO.
+           05 WS-FIRST       PIC X VALUE 'Y'.
        PROCEDURE DIVISION.
        MAIN-LOGIC SECTION.
          000-START.
            OPEN INPUT CSV-FILE.
            OPEN OUTPUT CLSTER-FILE.
          010-PROCESS.
-           READ CLSTER-FILE.
-           MOVE CSV-ID TO WS-CURRENT-KEY
-           MOVE CSV-KARMA TO WS-CUR-KARMA
-           MOVE CSV-COMMENT to WS-CUR-COMMENT
            PERFORM UNTIL WS-END EQUAL 'Y'
-              READ CLSTER-FILE AT END MOVE 'Y' TO WS-END
-              IF WS-CURRENT-KEY NOT EQUAL TO CSV-ID THEN
-                MOVE WS-CURRENT-KEY TO CLSTER-KEY
-                MOVE WS-CUR-KARMA TO CLSTER-KEY
-                MOVE WS-CUR-COMMENT TO CLSTER-COMMENT
-                WRITE CLSTER-REC
-                MOVE CSV-ID TO WS-CURRENT-KEY
-                MOVE CSV-KARMA TO WS-CUR-KARMA
-                MOVE CSV-COMMENT TO WS-CUR-COMMENT
-              ELSE
-                PERFORM ADD-TO-CURRENT
-              END-IF 
-           END-PERFORM.
+              READ CSV-FILE AT END 
+                 MOVE 'Y' TO WS-END
+                 WRITE CLSTER-REC FROM WS-CUR-REC
+                 EXIT PERFORM
+              END-READ
+              IF WS-FIRST EQUAL 'Y'
+                 PERFORM ADD-TO-CURRENT
+                 MOVE 'N' TO WS-FIRST 
+                 EXIT PERFORM CYCLE
+              END-IF
+              PERFORM ADD-TO-CURRENT
+              IF WS-CURRENT-KEY NOT EQUAL TO CSV-ID
+                 WRITE CLSTER-REC FROM WS-CUR-REC
+                 MOVE 'Y' TO WS-FIRST
+                 MOVE ALL ZERO TO WS-CUR-REC 
+              END-IF
+           END-PERFORM. 
          020-END.
            CLOSE CSV-FILE.
            CLOSE CLSTER-FILE.
            GOBACK.
          ADD-TO-CURRENT.
-           ADD CSV-KARMA TO WS-CUR-KARMA GIVING WS-CUR-KARMA.
-           ADD CSV-COMMENT TO WS-CUR-COMMENT GIVING WS-CUR-COMMENT. 
+           ADD CSV-KARMA TO WS-CUR-KARMA.
+           ADD CSV-COMMENT TO WS-CUR-COMMENT. 
