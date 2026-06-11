@@ -1,16 +1,17 @@
        IDENTIFICATION DIVISION. 
        PROGRAM-ID. GETHN.
+       AUTHOR. PEDRO.
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
-           SELECT JSON-FD ASSIGN TO A ACCESS MODE IS SEQUENTIAL.
+           SELECT JSON-FD ASSIGN TO RESULT ACCESS MODE IS SEQUENTIAL.
        DATA DIVISION.
        FILE SECTION.
        FD JSON-FD.
        01 A PIC X(1000).
        WORKING-STORAGE SECTION.
        01  JSON-RETORN.
-           05 TYPE-INFO      PIC X(4).
+           05 TYPE-INFO      PIC X(5).
            05 TOTAL-KARMA    PIC 9(10).
            05 TOTAL-COMMENT  PIC 9(12).
            05 AVG-KARMA      PIC 9(10)V99.
@@ -18,19 +19,48 @@
        01 ERROR-JSON.
            05 TYPE-INFO PIC X(5) VALUE 'ERROR'.
            05 REASON    PIC X(25).
-       01 JSON-BUFFER PIC X(1000) VALUE SPACES.
+       01 JSON-BUFFER   PIC X(1000) VALUE SPACES.
+       01 WS-ID.
+           05 WS-YEAR   PIC 9(4).
+           05 WS-MON    PIC 9(2).
        LINKAGE SECTION.
        01 PARMDATA.
-           05 STRINGLEN PIC 9(4) USAGE COMP.
+           05 STRINGLEN PIC  S9(4) USAGE COMP.
            05 STRINGPARM PIC X(80).
        PROCEDURE DIVISION USING PARMDATA.
+       000-MAIN.
            OPEN OUTPUT JSON-FD.
+           PERFORM 010-PROCESS.
+           PERFORM 030-END.
+      *       
+       010-PROCESS.
            IF STRINGLEN EQUAL ZERO
               MOVE 'MUST HAVE YEAR OR MONTH' TO ERROR-JSON
-              JSON GENERATE JSON-BUFFER FROM ERROR-JSON
-              WRITE JSON-FD FROM JSON-BUFFER
-              GOBACK
+              PERFORM 020-ERROR
            END-IF. 
-       0X0-END.
+           IF STRINGPARM(1:5) EQUAL TO 'YEAR='
+              SUBTRACT 5 FROM STRINGLEN
+              IF STRINGLEN NOT EQUAL TO 2
+              END-IF
+              EXIT PARAGRAPH 
+           END-IF.
+           IF STRINGPARM(1:6) EQUAL TO 'MONTH='
+              SUBTRACT 6 FROM STRINGLEN
+              EXIT PARAGRAPH 
+           END-IF
+           IF STRINGPARM(1:10) EQUAL TO 'YEARMONTH='
+              EXIT PARAGRAPH 
+           END-IF.
+           MOVE 'INVALID ARGUMENT' TO ERROR-JSON.
+           PERFORM 030-END.
+       020-ERROR.
+           JSON GENERATE JSON-BUFFER FROM ERROR-JSON.
+           WRITE JSON-FD FROM JSON-BUFFER.
+           PERFORM 030-END.
+       030-END.
            CLOSE JSON-FD.
            GOBACK.
+       GET-ALL-SAME-YEAR.
+
+       GET-ALL-SAME-MON.
+       GET-ID.
