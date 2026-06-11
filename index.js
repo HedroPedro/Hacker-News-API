@@ -10,7 +10,7 @@ const app = express()
 app.use(express.json(), cors())
 
 const ZID = env.ZID
-const jclString = readFileSync("GETHN.jcl")
+const jclString = readFileSync("mainframe/GETHN.jcl")
 
 if (ZID === undefined)
 	throw new Error("ZID must be defined")
