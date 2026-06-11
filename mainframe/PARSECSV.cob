@@ -54,11 +54,12 @@
                  MOVE 'N' TO WS-FIRST 
                  EXIT PERFORM CYCLE
               END-IF
-              PERFORM ADD-TO-CURRENT
               IF WS-CURRENT-KEY NOT EQUAL TO CSV-ID
                  WRITE CLSTER-REC FROM WS-CUR-REC
                  MOVE 'Y' TO WS-FIRST
                  MOVE ALL ZERO TO WS-CUR-REC 
+              ELSE
+                 PERFORM ADD-TO-CURRENT
               END-IF
            END-PERFORM. 
          020-END.
