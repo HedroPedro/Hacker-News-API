@@ -2,7 +2,7 @@ import express from "express"
 import cors from "cors"
 import { env } from 'node:process'
 import { ProfileInfo } from "@zowe/imperative"
-import { SubmitJobs, MonitorJobs } from "@zowe/zos-jobs-for-zowe-sdk"
+import { SubmitJobs, MonitorJobs, GetJobs } from "@zowe/zos-jobs-for-zowe-sdk"
 import { readFileSync } from "node:fs"
 
 const PORT = 3000
@@ -10,6 +10,7 @@ const app = express()
 app.use(express.json(), cors())
 
 const ZID = env.ZID
+const datasetName = "RESULT"
 const jclString = readFileSync("mainframe/GETHN.jcl")
 
 if (ZID === undefined)
@@ -32,6 +33,11 @@ const getResult = async (value) => {
 		status: "OUTPUT",
 		attempts: 20
 	})
+	const spoolFiles = await GetJobs.getSpoolFiles(session, jobResult.jobname, jobResult.jobid)
+
+	for (const spool of spoolFiles) {
+		console.log(spool.ddname)
+	}
 }
 app.get("/", (req, res) => {
 	res.send({

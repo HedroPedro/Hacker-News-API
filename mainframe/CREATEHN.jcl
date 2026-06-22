@@ -2,12 +2,12 @@
 //IDCAMS   EXEC PGM=IDCAMS
 //SYSPRINT DD   SYSOUT=*
 //SYSIN    DD   *
- DEFINE    CLUSTER  (NAME(&SYSUID..HN.CLSTER)                 -
-                    TRACKS(2 1)                               -
-                    RECORDSIZE(26 26)                         -
-                    SPACE(197 10)
-                    KEYS(4 0)                                 -
+ DEFINE    CLUSTER  (NAME(UID.HN.CLSTER)                      -
+                    TRACKS(2 2)                               -
+                    RECORDSIZE(28 28)                         -
+                    KEYS(6 0)                                 -
                     INDEXED)                                  -
-           INDEX    (NAME(&SYSUID..HN.INDEX))
+           DATA     (NAME(UID.HN.DATA))                       -
+           INDEX    (NAME(UID.HN.INDEX))
 /*
 //

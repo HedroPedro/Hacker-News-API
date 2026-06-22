@@ -6,7 +6,7 @@ hn_dropped_na = hn_removed_cols.dropna()
 
 hn_formated = hn_dropped_na
 
-hn_formated['Points'] = hn_formated['Points'].apply(lambda x: f'{x:04d}')
+hn_formated['Points'] = hn_formated['Points'].astype(int).apply(lambda x: f'{x:04d}')
 hn_formated['Number of Comments'] = hn_formated['Number of Comments'].astype(int).apply(lambda x: f'{x:04d}')
 hn_formated['Created At'] = pd.to_datetime(hn_formated['Created At']).dt.strftime('%Y%m')
 

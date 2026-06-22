@@ -1,71 +1,75 @@
-       IDENTIFICATION DIVISION. 
+       IDENTIFICATION DIVISION.
        PROGRAM-ID. PARSECSV.
-       AUTHOR. PEDRO.
-       ENVIRONMENT DIVISION. 
-       CONFIGURATION SECTION. 
-       SOURCE-COMPUTER. IBM-3081. 
-       OBJECT-COMPUTER. IBM-3081. 
+       ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
-           SELECT CSV-FILE ASSIGN TO CSV ORGANIZATION IS LINE SEQUENTIAL
-              ACCESS IS SEQUENTIAL.
+           SELECT CSV-FILE ASSIGN TO CSV
+              FILE STATUS IS WS-CSV-STATUS.
               SELECT CLSTER-FILE ASSIGN TO CLSTER
                ORGANIZATION IS INDEXED
                ACCESS MODE IS SEQUENTIAL
                RECORD KEY IS CLSTER-KEY
-               FILE STATUS IS WS-STATUS.
+               FILE STATUS IS WS-CLSTER-STATUS.
        DATA DIVISION.
        FILE SECTION.
-       FD CSV-FILE
+       FD CSV-FILE.
        01 CSV-REC.
            05 CSV-ID      PIC X(6).
            05 FILLER      PIC X VALUE ','.
-           05 CSV-KARMA   PIC 9(6).
+           05 CSV-KARMA   PIC 9(4).
            05 FILLER      PIC X VALUE ','.
-           05 CSV-COMMENT PIC 9(7).
-           05 FILLER      PIC X(59) VALUE SPACE.
-       FD CLSTER-FILE
+           05 CSV-COMMENT PIC 9(4).
+           05 FILLER      PIC X(64) VALUE SPACE.
+       FD CLSTER-FILE.
        01 CLSTER-REC.
-           05 CLSTER-KEY     PIC 9(6).
+           05 CLSTER-KEY     PIC X(6).
            05 CLSTER-POINT   PIC 9(11).
            05 CLSTER-COMMENT PIC 9(11).
        WORKING-STORAGE SECTION.
-           05 WS-STATUS      PIC 9(2).
-           05 WS-CUR-REC. 
-              10 WS-CURRENT-KEY PIC 9(6) VALUE ZERO.
-              10 WS-CUR-KARMA   PIC 9(10) VALUE ZERO.
-              10 WS-CUR-COMMENT PIC 9(12) VALUE ZERO.
-           05 WS-END         PIC X VALUE 'N'.
-           05 WS-FIRST       PIC X VALUE 'Y'.
+       01 WS-FLAGS.
+           05 WS-CLSTER-STATUS  PIC 9(2).
+           05 WS-CSV-STATUS     PIC 9(2).
+           05 WS-END            PIC X VALUE 'N'.
+       01 WS-CUR-REC.
+           05 WS-CUR-ID      PIC X(6) VALUE ZERO.
+           05 WS-CUR-KARMA   PIC 9(11) VALUE ZERO.
+           05 WS-CUR-COMMENT PIC 9(11) VALUE ZERO.
        PROCEDURE DIVISION.
-       MAIN-LOGIC SECTION.
          000-START.
            OPEN INPUT CSV-FILE.
            OPEN OUTPUT CLSTER-FILE.
+           READ CSV-FILE AT END MOVE 'Y' TO WS-END
+           END-READ.
+           PERFORM ADD-TO-CURRENT.
+           MOVE CSV-ID TO WS-CUR-ID.
          010-PROCESS.
            PERFORM UNTIL WS-END EQUAL 'Y'
-              READ CSV-FILE AT END 
-                 MOVE 'Y' TO WS-END
-                 WRITE CLSTER-REC FROM WS-CUR-REC
-                 EXIT PERFORM
-              END-READ
-              IF WS-FIRST EQUAL 'Y'
+              IF CSV-ID EQUAL WS-CUR-ID
                  PERFORM ADD-TO-CURRENT
-                 MOVE 'N' TO WS-FIRST 
-                 EXIT PERFORM CYCLE
-              END-IF
-              IF WS-CURRENT-KEY NOT EQUAL TO CSV-ID
-                 WRITE CLSTER-REC FROM WS-CUR-REC
-                 MOVE 'Y' TO WS-FIRST
-                 MOVE ALL ZERO TO WS-CUR-REC 
               ELSE
-                 PERFORM ADD-TO-CURRENT
+                 PERFORM BREAK-LOGIC
               END-IF
-           END-PERFORM. 
+              READ CSV-FILE AT END MOVE 'Y' TO WS-END
+              END-READ
+           END-PERFORM.
+      *    SANITY CHECK: IF THE LAST RECORD IS DIFFERENT THAN WS
+      *     IT'S NECESSARY TO SAVE IT BEFORE SAVING THE ONE IN CSV
+           IF CSV-ID NOT EQUAL WS-CUR-ID
+              PERFORM BREAK-LOGIC
+           END-IF.
+           PERFORM WRITE-CLSTER.
          020-END.
            CLOSE CSV-FILE.
            CLOSE CLSTER-FILE.
            GOBACK.
+      *  FUNCTIONS
+         BREAK-LOGIC.
+           PERFORM WRITE-CLSTER.
+           PERFORM ADD-TO-CURRENT.
+           MOVE CSV-ID TO WS-CUR-ID.
          ADD-TO-CURRENT.
-           ADD CSV-KARMA TO WS-CUR-KARMA.
-           ADD CSV-COMMENT TO WS-CUR-COMMENT. 
+           ADD CSV-KARMA   TO WS-CUR-KARMA.
+           ADD CSV-COMMENT TO WS-CUR-COMMENT.
+         WRITE-CLSTER.
+           WRITE CLSTER-REC FROM WS-CUR-REC.
+           MOVE ALL ZERO TO WS-CUR-REC.
