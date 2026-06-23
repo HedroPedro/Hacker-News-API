@@ -58,7 +58,7 @@
            CLOSE JSON-FD.
            CLOSE CLSTER-FD.
            GOBACK.
-      *       
+      * FUNCTIONS      
        PROCESS-ARGS.
            IF STRINGLEN EQUAL ZERO
               MOVE 'MUST HAVE YEAR OR MONTH' TO REASON
