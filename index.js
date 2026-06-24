@@ -39,9 +39,10 @@ const getResult = async (value) => {
 		console.log(spool.ddname)
 	}
 }
+
 app.get("/", (req, res) => {
 	res.send({
-		routes: ["/api/hn/year/:year", "/api/hn/month/:month"],
+		routes: ["/api/hn/year/:year", "/api/hn/month/:month", "/api/hn/year/:year/:month"],
 		allowedMethods: ["GET"]
 	})
 })

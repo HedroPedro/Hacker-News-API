@@ -64,6 +64,7 @@
               MOVE 'MUST HAVE YEAR OR MONTH' TO REASON
               MOVE 500 TO ERR-CODE
               PERFORM GEN-ERROR-JSON
+              EXIT PARAGRAPH
            END-IF. 
            IF STRINGPARM(1:5) EQUAL TO 'YEAR='
               SUBTRACT 5 FROM STRINGLEN
@@ -189,7 +190,7 @@
               MOVE CLSTER-SCORE TO TOTAL-SCORE
               MOVE CLSTER-COMMENT TO TOTAL-COMMENTS
               JSON GENERATE JSON-DATA FROM JSON-REC
-                 SUPPRESS AVG-SCORE, AVG-COMMENT
+                 SUPPRESS AVG-SCORE AVG-COMMENT
               END-JSON
               WRITE JSON-DATA
            END-IF.
