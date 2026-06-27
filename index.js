@@ -39,10 +39,10 @@ const getResult = async (value) => {
 				session, jobResult.jobname, 
 				jobResult.jobid, spool.id, "UTF-8"
 			)
-			const trimmed = val.trimEnd();
-			const regMatch = trimmed.match(/\{.*\}/s);
+			const trimmed = val.trimEnd()
+			const regMatch = trimmed.match(/\{.*\}/s)
 			if (regMatch) {
-				const json = JSON.parse(regMatch[0]);
+				const json = JSON.parse(regMatch[0])
 				return json
 			}
 		}
@@ -55,10 +55,19 @@ const getResult = async (value) => {
 	}
 }
 
+const createRoute = (path, ...allowMethods) => {
+	return {name: path, methods: allowMethods}
+}
+
 app.get("/", (req, res) => {
 	res.send({
-		routes: ["/api/hn/year/:year", "/api/hn/month/:month", "/api/hn/year/:year/:month"],
-		allowedMethods: ["GET"]
+		api_name: "HACKERS NEW JS & COBOL API",
+		version: "1.0.0",
+		routes: [
+			createRoute("/api/hn/year/:year", "GET"),
+			createRoute("/api/hn/month/:month", "GET"),
+			createRoute("/api/hn/year/:year/:month", "GET")
+		],
 	})
 })
 
