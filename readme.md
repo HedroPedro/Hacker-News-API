@@ -1,7 +1,11 @@
 # Hacker News COBOL API
+> Built with the [Hacker News dataset](https://www.kaggle.com/datasets/santiagobasulto/all-hacker-news-posts-stories-askshow-hn-polls).
+Powered by COBOL in z/OS mainframe. 
+Why not unite the modern with the old.
 
-A REST API that uses COBOL running on IBM z/OS to query 
-aggregated Hacker News data stored in a VSAM dataset.
+This project explores mainframe modernization by exposing 
+VSAM data through a REST API, bridging COBOL batch 
+processing with modern web development using the Zowe SDK.
 
 ## Stack
 - Node.js + Express - API layer and route handling
