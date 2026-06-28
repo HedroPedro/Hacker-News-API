@@ -17,7 +17,7 @@ aggregated Hacker News data stored in a VSAM dataset.
 ## Setup
 1. Configure Zowe profile with z/OS credentials
 2. Upload and compile PARSECSV and GETHN.cbl
-3. Run IDCAMS JCL to create the VSAM cluster
+4. Run IDCAMS JCL to create the VSAM cluster
 3. Load data via PARSECSV.cbl
 4. npm install && npm run start
 
@@ -31,7 +31,7 @@ aggregated Hacker News data stored in a VSAM dataset.
                                ▲ │ Request
                           JSON │ ▼
 ┌──────────────────────────────┴────────────────────────────────┐
-│                            NODE. JS                           │
+│                            NODE.JS                            │
 │                              API                              │
 └────────────────────────────────┬──────────────────────────────┘
                                ▲ │ JCL with parameters
@@ -48,6 +48,9 @@ aggregated Hacker News data stored in a VSAM dataset.
 ```
 
 ## Article Series
-1. Part I - link
-2. Part II - link
-3. Part III - link
+1. Part I - [link]()
+2. Part II - [link]()
+3. Part III - [link]()
+
+## License
+This code was written with MIT License, see [LICENSE](LICENSE) for more details
