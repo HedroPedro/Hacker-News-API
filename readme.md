@@ -48,8 +48,8 @@ aggregated Hacker News data stored in a VSAM dataset.
 ```
 
 ## Article Series
-1. Part I - [link]()
-2. Part II - [link]()
+1. Part I - [link](https://medium.com/@pedrohenrique.oliveira119/lets-write-an-api-with-javascript-and-cobol-pt-i-f63c7c7b165b)
+2. Part II - [link](https://medium.com/@pedrohenrique.oliveira119/lets-write-an-api-with-javascript-and-cobol-pt-ii-b11cf957d0f7)
 3. Part III - [link]()
 
 ## License
