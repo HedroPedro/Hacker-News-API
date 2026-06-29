@@ -1,7 +1,6 @@
 # Hacker News COBOL API
 > Built with the [Hacker News dataset](https://www.kaggle.com/datasets/santiagobasulto/all-hacker-news-posts-stories-askshow-hn-polls).
-Powered by COBOL in z/OS mainframe. 
-Why not unite the modern with the old.
+Powered by COBOL in z/OS mainframe.
 
 This project explores mainframe modernization by exposing 
 VSAM data through a REST API, bridging COBOL batch 
