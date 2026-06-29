@@ -2,10 +2,6 @@
 > Built with the [Hacker News dataset](https://www.kaggle.com/datasets/santiagobasulto/all-hacker-news-posts-stories-askshow-hn-polls).
 Powered by COBOL in z/OS mainframe.
 
-This project explores mainframe modernization by exposing 
-VSAM data through a REST API, bridging COBOL batch 
-processing with modern web development using the Zowe SDK.
-
 ## Stack
 - Node.js + Express - API layer and route handling
 - Zowe SDK - Mainframe Integration and job submission
@@ -53,7 +49,7 @@ processing with modern web development using the Zowe SDK.
 ## Article Series
 1. Part I - [link](https://medium.com/@pedrohenrique.oliveira119/lets-write-an-api-with-javascript-and-cobol-pt-i-f63c7c7b165b)
 2. Part II - [link](https://medium.com/@pedrohenrique.oliveira119/lets-write-an-api-with-javascript-and-cobol-pt-ii-b11cf957d0f7)
-3. Part III - [link]()
+3. Part III - [link](https://medium.com/@pedrohenrique.oliveira119/lets-write-an-api-with-javascript-and-cobol-pt-iii-c4a41c0c1ffb)
 
 ## License
 This code was written with MIT License, see [LICENSE](LICENSE) for more details
